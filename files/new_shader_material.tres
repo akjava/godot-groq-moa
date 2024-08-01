@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://haiuo58tqyva"]
+
+[ext_resource type="Shader" path="res://files/greenback.gdshader" id="1_isny0"]
+
+[resource]
+shader = ExtResource("1_isny0")
+shader_parameter/h_min_value = 80.0
+shader_parameter/h_max_value = 160.0
+shader_parameter/s_value = 0.3
+shader_parameter/v_value = 0.4
+shader_parameter/h_min_margin = 30.0
+shader_parameter/h_max_margin = 30.0
+shader_parameter/s_value_margin = 0.25
+shader_parameter/v_value_margin = 0.25

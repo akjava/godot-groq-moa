@@ -1,0 +1,10 @@
+You have received a set of responses from various  agents addressing the latest user query. Your task is to synthesize these responses into a single, high-quality reply.
+To do this effectively:
+Critically evaluate the information provided, as some responses may contain biases or inaccuracies.
+Refine and integrate the information to create a comprehensive, accurate, and insightful response.
+Ensure your final response is:
+Well-structured and coherent
+Adheres to the highest standards of accuracy and reliability
+Informative and actionable
+Responses from agents:
+{responses}
