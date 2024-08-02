@@ -32,9 +32,10 @@ theme_override_constants/margin_bottom = 8
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 0
+current_tab = 2
 
 [node name="Mixture-of-Agents" type="VBoxContainer" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -201,7 +202,7 @@ alignment = 1
 
 [node name="WebResultDownloadButton" type="Button" parent="MarginContainer/TabContainer/Mixture-of-Agents/WebCopyContainer"]
 layout_mode = 2
-text = "Download Text(Because Web Copy is broken)"
+text = "Download Text(Because Web Copy is broken on itch.io)"
 
 [node name="AgentSettings" type="VBoxContainer" parent="MarginContainer/TabContainer"]
 visible = false
@@ -425,7 +426,6 @@ size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("2_gh1vs")
 
 [node name="APIKeys" type="VBoxContainer" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -436,7 +436,11 @@ horizontal_alignment = 1
 
 [node name="Label5" type="Label" parent="MarginContainer/TabContainer/APIKeys"]
 layout_mode = 2
-text = "Groq API Key"
+text = "Groq API Key　"
+
+[node name="WebErrorLabel" type="Label" parent="MarginContainer/TabContainer/APIKeys"]
+layout_mode = 2
+text = "If key error happen Reload Page and paste again."
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/APIKeys"]
 layout_mode = 2

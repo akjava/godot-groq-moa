@@ -106,6 +106,8 @@ func _ready():
 		find_child("WebContainer").visible = true
 		find_child("AppContainer").visible = false
 		find_child("WebCopyContainer").visible = true
+		find_child("WebErrorLabel").visible = true
+		
 		
 	else:
 		find_child("WebContainer").visible = false
@@ -113,6 +115,7 @@ func _ready():
 		
 		find_child("WebLabel").visible = false
 		find_child("WebCopyContainer").visible = false
+		find_child("WebErrorLabel").visible = false
 		
 	http_request = HTTPRequest.new()
 	add_child(http_request)

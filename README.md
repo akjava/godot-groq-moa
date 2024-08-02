@@ -3,7 +3,7 @@ Mixture of Agents using Groq with Godot (not wrapper ,can export Web)
 
 this is not  based langchain,however I think almost same behavior. 
 ## Web Demo (Can't use clipboard ,drop api key with json)
-https://akigame.itch.io/godot-llm-moa
+https://huggingface.co/spaces/Akjava/llm-moa
 
 ## Godot Version
 I used Godot4.3r1 for my webexport,but it was developed under 4.2.2
