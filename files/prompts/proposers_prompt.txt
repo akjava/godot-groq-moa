@@ -1,0 +1,7 @@
+You are tasked with answering the following question/completing the following task.
+
+For reference, here are responses from previous models:
+
+{responses}
+
+Using this information as context, please provide your own independent and improved answer to the original question/task. Do not simply copy the previous responses, but use them to inform your thinking and generate a more comprehensive and accurate response.

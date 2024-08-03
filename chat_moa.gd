@@ -22,7 +22,7 @@ var groq_model_ids_short =[
 const MAX_PRESET = 9
 const MAX_TEXT = 6
 const IMAGE_MAX = 14
-
+const PROMPTS_DIR = "res://files/prompts/"
 		
 class Agent:
 	var model = "llama-3.1-8b-instant"
@@ -56,11 +56,16 @@ func _load_main_prompt(index):
 	var prompt = FileAccess.get_file_as_string(file_name)
 	return prompt
 func _get_main_prompt_path(index):
-	var base_dir = "res://files/prompts/"
-	var file_name = "%smain_prompt%s.txt"%[base_dir,index]
+	
+	var file_name = "%smain_prompt%s.txt"%[PROMPTS_DIR,index]
 	if FileAccess.file_exists(file_name):
 		return file_name
 	return null
+
+func _load_proposers_prompt():
+	var file_name = "%sproposers_prompt.txt"%[PROMPTS_DIR]
+	var prompt = FileAccess.get_file_as_string(file_name)
+	return prompt
 	
 func _set_up_prompt_preset():
 	var option1 = find_child("MainPromptOptionButton")
@@ -70,7 +75,15 @@ func _set_up_prompt_preset():
 				var prompt = _load_main_prompt(i)
 				find_child("FinalPromptTextEdit").text = prompt
 			option1.add_item("Preset %s"%i)
+			
+	var proposers_prompt = _load_proposers_prompt()
+	find_child("ProposersPromptTextEdit").text = proposers_prompt
 
+func _get_proposers_prompt():
+	return find_child("ProposersPromptTextEdit").text
+func _get_aggregators_prompt():
+	return find_child("FinalPromptTextEdit").text
+	
 func _get_max_agent_count():
 	var option =find_child("MaxAgentOptionButton")
 	return option.get_selected_id()
@@ -273,7 +286,7 @@ func _on_send_button_pressed():
 		# without this
 		
 		final_response_text = response_text
-		var reference_system_prompt = find_child("FinalPromptTextEdit").text
+		var reference_system_prompt = _get_proposers_prompt()
 		chained_system_prompt = reference_system_prompt.replace("{responses}",final_response_text)
 		
 	
@@ -294,7 +307,7 @@ func _request_final(prompt = null):
 	
 	
 	var final_header = find_child("FinalAssistantTextEdit").text+"\n\n"
-	var reference_system_prompt = find_child("FinalPromptTextEdit").text
+	var reference_system_prompt = _get_aggregators_prompt()
 	var final_system_prompt = final_header+reference_system_prompt.replace("{responses}",final_response_text)
 	
 	print("[Final %s]%final_index")
