@@ -32,10 +32,9 @@ theme_override_constants/margin_bottom = 8
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Mixture-of-Agents" type="VBoxContainer" parent="MarginContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -182,7 +181,17 @@ text = "Re Final thought"
 [node name="SummarizeButton" type="Button" parent="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3"]
 layout_mode = 2
 disabled = true
-text = "summarize agents opinions."
+text = "summarize "
+
+[node name="PickoneButton" type="Button" parent="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3"]
+layout_mode = 2
+disabled = true
+text = "Pick Best"
+
+[node name="TranslateButton" type="Button" parent="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3"]
+layout_mode = 2
+disabled = true
+text = "TransJP"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/TabContainer/Mixture-of-Agents"]
 layout_mode = 2
@@ -192,7 +201,6 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = ExtResource("2_gh1vs")
-editable = false
 wrap_mode = 1
 
 [node name="WebCopyContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Mixture-of-Agents"]
@@ -201,10 +209,12 @@ size_flags_horizontal = 3
 alignment = 1
 
 [node name="WebResultDownloadButton" type="Button" parent="MarginContainer/TabContainer/Mixture-of-Agents/WebCopyContainer"]
+visible = false
 layout_mode = 2
 text = "Download Text(Because Web Copy is broken on itch.io)"
 
 [node name="AgentSettings" type="VBoxContainer" parent="MarginContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -569,6 +579,8 @@ text = "Step 5: check top api key filled ** and change Mixture-of-Agents Tab"
 [connection signal="item_selected" from="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3/MainModelOptionButton" to="." method="_on_main_model_option_button_item_selected"]
 [connection signal="pressed" from="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3/ReFinalButton" to="." method="_on_re_final_button_pressed"]
 [connection signal="pressed" from="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3/SummarizeButton" to="." method="_on_summarize_button_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3/PickoneButton" to="." method="_on_pickone_button_pressed"]
+[connection signal="pressed" from="MarginContainer/TabContainer/Mixture-of-Agents/HBoxContainer3/TranslateButton" to="." method="_on_translate_button_pressed"]
 [connection signal="pressed" from="MarginContainer/TabContainer/Mixture-of-Agents/WebCopyContainer/WebResultDownloadButton" to="." method="_on_web_result_download_button_pressed"]
 [connection signal="item_selected" from="MarginContainer/TabContainer/AgentSettings/HBoxContainer2/MaxAgentOptionButton" to="." method="_on_max_agent_option_button_item_selected"]
 [connection signal="pressed" from="MarginContainer/TabContainer/AgentSettings/HBoxContainer2/HBoxContainer/SetHelpfulAssistantButton" to="." method="_on_set_helpful_assistant_button_pressed"]

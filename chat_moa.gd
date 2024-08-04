@@ -8,6 +8,11 @@ var conversations = []
 var last_user_prompt
 var main_model = "llama-3.1-70b-versatile"
 
+
+var summarrize_prompt = ""
+var pickone_prompt = ""
+var translate_prompt = ""
+
 var groq_model_ids =[
 	"gemma-7b-it","gemma2-9b-it","llama-3.1-8b-instant",
 	"llama3-70b-8192","llama3-8b-8192","mixtral-8x7b-32768","llama-3.1-70b-versatile",
@@ -136,11 +141,16 @@ func _ready():
 	_set_up_agent_text()
 	_set_up_max_agent_button()
 	_set_up_main_option_button()
+	
+	_setup_prompts()
 	update_main_model()
 
 
 	
-
+func _setup_prompts():
+	summarrize_prompt = FileAccess.get_file_as_string("%ssummarrize_prompt.txt"%PROMPTS_DIR)
+	pickone_prompt = FileAccess.get_file_as_string("%spickone_prompt.txt"%PROMPTS_DIR)
+	translate_prompt = FileAccess.get_file_as_string("%stranslate_prompt.txt"%PROMPTS_DIR)
 	
 func _setup_llm_option(option_button,selected_index):
 	var max = 9
@@ -221,6 +231,8 @@ func _on_send_button_pressed():
 	find_child("SendButton").disabled = true
 	find_child("SummarizeButton").disabled = true
 	find_child("ReFinalButton").disabled = true
+	find_child("PickoneButton").disabled = true
+	find_child("TranslateButton").disabled = true
 	
 	var input = find_child("InputEdit").text
 	
@@ -301,15 +313,19 @@ func _on_send_button_pressed():
 	
 
 var final_index = 1
-func _request_final(prompt = null):
+func _request_final(prompt = null,another_system = null,use_history = true):
 	find_child("SummarizeButton").disabled = true
+	find_child("PickoneButton").disabled = true
+	find_child("TranslateButton").disabled = true
 	find_child("ReFinalButton").disabled = true
 	
 	
 	var final_header = find_child("FinalAssistantTextEdit").text+"\n\n"
 	var reference_system_prompt = _get_aggregators_prompt()
 	var final_system_prompt = final_header+reference_system_prompt.replace("{responses}",final_response_text)
-	
+	if another_system!=null:
+		final_system_prompt = another_system
+		
 	print("[Final %s]%final_index")
 	var input = find_child("InputEdit").text
 	
@@ -318,7 +334,8 @@ func _request_final(prompt = null):
 	
 	print("input prompt = %s"%input)
 		
-	var error_main =  _request_chat(main_model,input,final_system_prompt)
+	
+	var error_main =  _request_chat(main_model,input,final_system_prompt,use_history)
 	if error_main != OK:
 		push_error("requested but error happen code = %s"%error_main)
 		return
@@ -335,18 +352,24 @@ func _request_final(prompt = null):
 		messages_option_button_dic[label] = dic
 		final_index += 1
 		find_child("SummarizeButton").disabled = false
+		find_child("PickoneButton").disabled = false
+		find_child("TranslateButton").disabled = false
 		find_child("ReFinalButton").disabled = false
 	else:
 		push_error("Final response faild %s"%input)
 	
 	find_child("SendButton").disabled = false 
 	find_child("SummarizeButton").disabled = false
+	find_child("PickoneButton").disabled = false
+	find_child("TranslateButton").disabled = false
 	find_child("ReFinalButton").disabled = false
 
 
-func _request_chat(model_name,prompt,system_prompt=""):
+func _request_chat(model_name,prompt,system_prompt="",use_history=true):
 	
 	var url = "https://api.groq.com/openai/v1/chat/completions"
+	
+	
 	print(url)
 	var contents_value = []
 	
@@ -354,19 +377,19 @@ func _request_chat(model_name,prompt,system_prompt=""):
 			"role":"system",
 			"content":system_prompt
 		})
-		
-	for conversation in conversations:
-		if conversation.has("user"):
-			contents_value.append({
-				"role":"user",
-				"content":conversation["user"]
-			})
-		
-		if conversation.has("model"):
-			contents_value.append({
-				"role":"assistant",
-				"content":conversation["model"]
-			})
+	if use_history:
+		for conversation in conversations:
+			if conversation.has("user"):
+				contents_value.append({
+					"role":"user",
+					"content":conversation["user"]
+				})
+			
+			if conversation.has("model"):
+				contents_value.append({
+					"role":"assistant",
+					"content":conversation["model"]
+				})
 			
 	contents_value.append({
 				"role":"user",
@@ -462,9 +485,7 @@ func _on_re_final_button_pressed():
 
 
 func _on_summarize_button_pressed():
-	# TODO export text
-	var prompt = find_child("SummarizeButton").text
-	prompt+=".Replace agent{number} to character role"
+	var prompt = summarrize_prompt
 	_request_final(prompt)
 
 
@@ -517,3 +538,18 @@ func _on_main_prompt_option_button_item_selected(index: int) -> void:
 func _on_web_result_download_button_pressed() -> void:
 	var text = find_child("ResponseEdit").text
 	JavaScriptBridge.download_buffer(text.to_utf8_buffer(), "response.txt")
+
+
+func _on_pickone_button_pressed() -> void:
+	var prompt = pickone_prompt
+	_request_final(prompt)
+
+
+func _on_translate_button_pressed() -> void:
+	var prompt = translate_prompt
+	var input = "No Text"
+	if messages_option_button_dic.has("Final 01"):
+		#print(messages_option_button_dic["Final 01"])
+		#input = messages_option_button_dic["Final 01"].model
+		input = find_child("ResponseEdit").text
+	_request_final(input,prompt,false)

@@ -1,0 +1,1 @@
+pick the best opinion from agents opinions..Replace agent{number} to character role.Explain the reason why you choose that one.

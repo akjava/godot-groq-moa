@@ -1,0 +1,1 @@
+summarize agents opinions..Replace agent{number} to character role
